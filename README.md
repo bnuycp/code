@@ -7,7 +7,7 @@
 
 rm(list = ls())
 condcor<- function(x, y, z, trans=1, seed=1, h=10) {
-  % set.seed(211003 + seed)
+  set.seed(211003 + seed)
   library(nortest)
   library(MASS)
   library(splines)
@@ -18,7 +18,7 @@ condcor<- function(x, y, z, trans=1, seed=1, h=10) {
   z <- z - outer(rep(1, n), colMeans(z), "*")
   theta <- solve(t(z)%*%z) %*% (t(z)%*%x)
   
-  % 转换函数为样条基函数
+  # 转换函数为样条基函数
   if(trans == 1) {
     u <- t(bs(y, h))
     u <- u - outer(rowMeans(u), rep(1, ncol(u)), "*")
@@ -27,13 +27,13 @@ condcor<- function(x, y, z, trans=1, seed=1, h=10) {
     # }
   }
   
-  % 转换函数为y^k
+  # 转换函数为y^k
   if(trans == 2) {
     u <- t(outer(y, 1:h, "^"))
     u <- u - outer(rowMeans(u), rep(1, ncol(u)), "*")
   }
   
-  % 转换函数为fk(y)=y if y is in the kth slice
+ # 转换函数为fk(y)=y if y is in the kth slice
   if(trans == 3) {
     dis <- n/h
     u <- matrix(NA, h, n)
@@ -45,7 +45,7 @@ condcor<- function(x, y, z, trans=1, seed=1, h=10) {
     u <- u - outer(rowMeans(u), rep(1, ncol(u)), "*")
   }
   
-  % 转换函数为fk(y)=1 if y is in the kth slice 
+  # 转换函数为fk(y)=1 if y is in the kth slice 
   if(trans == 4){
     dis <- n/h
     u <- matrix(NA, h, n)
