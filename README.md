@@ -1,4 +1,10 @@
-# code
+# Author: Yu Cuiping
+# Date: Oct 10th, 2021
+# Introduction: 
+# Code of a new partial correlation coefficient
+# input: x, y, z, which x and y is univariate variable, and z can be univariate or multivariate.
+# output: the partial correlation coefficient of x and y given z, ie. \rho^2(x,y|z).
+
 rm(list = ls())
 condcor<- function(x, y, z, trans=1, seed=1, h=10) {
   # set.seed(211003 + seed)
@@ -97,6 +103,9 @@ condcor<- function(x, y, z, trans=1, seed=1, h=10) {
   return(res.list)
 }
 
+# input: Design matrix X, response y.
+# output: the variable selected.
+
 condsdr <- function(X, y, trans=1, seed=1, h=10){
   p <- ncol(X)
   rho <- c()
@@ -119,3 +128,30 @@ condsdr <- function(X, y, trans=1, seed=1, h=10){
   return(res)
 }
 
+# examples
+library(nortest)
+library(MASS)
+library(splines)
+n <- 200; p <- 10; rho <- 0.5
+sigma <- toeplitz(rho^seq(0, p-1))
+X <- mvrnorm(n, mu=rep(0, p), sigma) 
+error <- rnorm(n)
+# example1
+y <- X[,1] + X[,2] + error
+condsdr(X, y, trans=1, seed=1, h=10)
+x <- X[,1]; z <- X[,-1]
+condcor(x, y, z, trans=1, seed=1, h=10)
+# example2
+y <- 3*sin(X[,1])+3*sin(X[,p])+0.1*error
+condsdr(X, y, trans=1, seed=1, h=10)
+x <- X[,1]; z <- X[,-1]
+condcor(x, y, z, trans=1, seed=1, h=10)
+x <- X[,3]; z <- X[,-3]
+condcor(x, y, z, trans=1, seed=1, h=10)
+# example3
+y=sign(X[,1]+X[,p])*exp(X[,2]+X[,p-1])+0.1*error
+condsdr(X, y, trans=1, seed=1, h=10)
+x <- X[,1]; z <- X[,-1]
+condcor(x, y, z, trans=1, seed=1, h=10)
+x <- X[,3]; z <- X[,-3]
+condcor(x, y, z, trans=1, seed=1, h=10)
