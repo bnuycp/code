@@ -1,12 +1,12 @@
 # Code of a new partial correlation coefficient
 
-condcor
+# condcor
 
 input:x,y,z, where x and y is univariate, while z can be multivariable;
 
 output:\rho(x,y|z) and x and y is conditional dependent or conditional independent given z.
 
-condsdr:
+# condsdr
 
 input: response y and designed matrix X;
 
